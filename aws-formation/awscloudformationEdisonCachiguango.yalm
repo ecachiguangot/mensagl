@@ -1,33 +1,33 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: '2025-02-04'
 Description: script de AWS de Edison
 
 Resources:
   # =======================
-  # 📌 1. Creación de Claves SSH
+  # Creación de Claves SSH
   # =======================
   KeyPair:
     Type: AWS::EC2::KeyPair
     Properties:
-      KeyName: ssh-mensagl-2025-Equipo6
+      KeyName: ssh-mensagl-2025-EdisonTeran
 
   # =======================
-  # 📌 2. Creación de VPC y Subredes en 2 AZs
+  # Creación de VPC y Subredes en 2 AZs
   # =======================
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.221.0.0/16
+      CidrBlock: 10.204.0.0/16
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: VPC-Mensagl-2025-Equipo6
+          Value: VPC-Mensagl-2025-EdisonTeran
 
   SubnetPublic1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.221.1.0/24
+      CidrBlock: 10.204.1.0/24
       AvailabilityZone: !Select
         - 0
         - !GetAZs ''
@@ -40,7 +40,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.221.2.0/24
+      CidrBlock: 10.204.2.0/24
       AvailabilityZone: !Select
         - 1
         - !GetAZs ''
@@ -53,7 +53,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.221.3.0/24
+      CidrBlock: 10.204.3.0/24
       AvailabilityZone: !Select
         - 0
         - !GetAZs ''
@@ -66,7 +66,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref MyVPC
-      CidrBlock: 10.221.4.0/24
+      CidrBlock: 10.204.4.0/24
       AvailabilityZone: !Select
         - 1
         - !GetAZs ''
@@ -76,7 +76,7 @@ Resources:
           Value: Subnet-Privada-2
 
   # =======================
-  # 📌 3. Crear Gateway de Internet y NAT
+  #  Creacion de Gateway de Internet y NAT
   # =======================
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -109,7 +109,7 @@ Resources:
           Value: NAT-Gateway
 
   # =======================
-  # 📌 4. Crear Grupos de Seguridad
+  # Creacion de grupos de Seguridad
   # =======================
   SecurityGroupProxy:
     Type: AWS::EC2::SecurityGroup
@@ -142,11 +142,11 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5222
           ToPort: 5222
-          CidrIp: 10.221.0.0/16  # Permitir tráfico interno dentro de la VPC
+          CidrIp: 10.204.0.0/16  # Permitirá tráfico interno dentro de la VPC
         - IpProtocol: tcp
           FromPort: 5269
           ToPort: 5269
-          CidrIp: 10.221.0.0/16  # Permitir tráfico interno dentro de la VPC
+          CidrIp: 10.204.0.0/16  # Permitirá tráfico interno dentro de la VPC
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
@@ -188,7 +188,7 @@ Resources:
           Value: SG-RDS
 
   # =======================
-  # 📌 5. Crear Instancias EC2 con IP FIJA
+  # Creacion de Instancias EC2 con IP FIJA
   # =======================
   ProxyInstance1:
     Type: AWS::EC2::Instance
@@ -229,7 +229,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyPair
       SubnetId: !Ref SubnetPrivate1
-      PrivateIpAddress: 10.221.3.10
+      PrivateIpAddress: 10.204.3.10
       SecurityGroupIds:
         - !Ref SecurityGroupXMPP
       ImageId: ami-04b4f1a9cf54c11d0
@@ -244,7 +244,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyPair
       SubnetId: !Ref SubnetPrivate1
-      PrivateIpAddress: 10.221.3.20
+      PrivateIpAddress: 10.204.3.20
       SecurityGroupIds:
         - !Ref SecurityGroupXMPP
       ImageId: ami-04b4f1a9cf54c11d0
@@ -273,7 +273,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyPair
       SubnetId: !Ref SubnetPrivate2
-      PrivateIpAddress: 10.221.4.10
+      PrivateIpAddress: 10.204.4.10
       SecurityGroupIds:
         - !Ref SecurityGroupRDS
       ImageId: ami-04b4f1a9cf54c11d0
@@ -287,7 +287,7 @@ Resources:
       InstanceType: t2.micro
       KeyName: !Ref KeyPair
       SubnetId: !Ref SubnetPrivate2
-      PrivateIpAddress: 10.221.4.20
+      PrivateIpAddress: 10.204.4.20
       SecurityGroupIds:
         - !Ref SecurityGroupRDS
       ImageId: ami-04b4f1a9cf54c11d0
@@ -296,7 +296,7 @@ Resources:
           Value: Soporte2
 
   # =======================
-  # 📌 6. Base de Datos RDS
+  # Creacion de la Base de Datos RDS
   # =======================
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -331,14 +331,14 @@ Resources:
 
 Outputs:
   # =======================
-  # 📌 Información de la clave SSH
+  # Información a cerca de la clave SSH
   # =======================
   KeyPairName:
     Description: Nombre del Par de Claves creado
     Value: !Ref KeyPair
 
   # =======================
-  # 📌 Información de la VPC y Subredes
+  # Información sobre la VPC y las subredes
   # =======================
   VPCId:
     Description: ID de la VPC
@@ -361,7 +361,7 @@ Outputs:
     Value: !Ref SubnetPrivate2
 
   # =======================
-  # 📌 Información de las Instancias EC2
+  # Información sobre las Instancias EC2
   # =======================
   ProxyInstance1Id:
     Description: ID de la instancia Proxy Nginx 1
@@ -392,7 +392,7 @@ Outputs:
     Value: !Ref SoporteInstance2
 
   # =======================
-  # 📌 Información de la Base de Datos RDS
+  # Información a cerca de la Base de Datos RDS
   # =======================
   RDSInstanceId:
     Description: ID de la instancia RDS MySQL

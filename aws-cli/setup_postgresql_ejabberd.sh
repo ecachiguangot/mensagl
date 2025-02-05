@@ -1,6 +1,5 @@
-#Script para instalar postgresql para XMPP
-#Jesus Alfonso Varela
-#Version 1.0
+#Script para la instalacion de postgresql para XMPP
+#Edison Javier Cachiguango Teran
 
 #!/bin/bash
 
@@ -12,13 +11,13 @@ DB_NAME="ejabberd_db"
 DB_USER="ejabberd"
 DB_PASS="EjabberdSecurePass123"
 
-echo "🚀 Iniciando instalación de PostgreSQL..."
+echo "Comenzando la instalación de PostgreSQL..."
 
-# Actualizar sistema e instalar PostgreSQL
+# Actualizacion del sistema e instalancion de PostgreSQL
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y postgresql-$PG_VERSION postgresql-contrib
 
-# Habilitar PostgreSQL en el inicio y arrancarlo
+# Habilitar PostgreSQL en el inicio y su arranque
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 
@@ -37,4 +36,4 @@ echo "host    $DB_NAME    $DB_USER    0.0.0.0/0    md5" | sudo tee -a $PG_HBA
 # Reiniciar PostgreSQL para aplicar cambios
 sudo systemctl restart postgresql
 
-echo "🎉 PostgreSQL configurado correctamente para Ejabberd 12.4."
+echo "El PostgreSQL fue configurado correctamente para Ejabberd 12.4."
